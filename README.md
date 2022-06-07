@@ -1,6 +1,6 @@
 # CootraCosta
 ## Esto esta compliquiridijillo
 
-. Es un sistema medio complidirijillo
-. Pero sirve
-. Usalo
+1. Es un sistema medio complidirijillo
+2. Pero sirve
+3. Usalo
