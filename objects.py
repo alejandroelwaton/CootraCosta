@@ -8,7 +8,7 @@ def clear():
     sistema = os.sys.platform
     if sistema == 'win32':
         text = 'cls'
-    elif sistema == "Linux" or sistema == "Darwin":
+    elif sistema == "linux" or sistema == "darwin":
         text = "clear"
     else:
         print('Tu sistema operativo no es compatible')
@@ -57,11 +57,12 @@ class Buses:
         for ruta in rutas:
             if ruta_bus == rutas.index(ruta)-1:
                 ruta_bus = ruta
+        self.mostrar_asientos()
 
     
 
     def anadir_bus(rutas:list):
-        numero = int(input('numero del bus: '))
+        ID_bus = int(input('numero del bus: '))
         placa = input('placa del bus: ')
         conductor = input('conductor del bus: ')
         puestos_mal_estado = int(input('Cantidad de puestos en mal estado: '))
@@ -73,6 +74,8 @@ class Buses:
             puestos_mal_estado -= 1
         mal_estado = [asientos for asientos in asientos_mal_estado]
         print(mal_estado)
+        filas = int(input('filas del bus: '))
+        columnas = int(input('Columnas del bus: '))
         for ruta in rutas:
             print(f'{rutas.index(ruta)+1}, {ruta.origen} -> {ruta.destino}')
         ruta_bus = input('Ruta que seguira el bus: ')
@@ -80,7 +83,10 @@ class Buses:
             if ruta_bus == rutas.index(ruta)-1:
                 ruta_bus = ruta
 
-        nuevo_bus = Buses(numero, placa, conductor, mal_estado, filas, columnas, ruta)
+        nuevo_bus = Buses(ID_bus, placa, conductor, mal_estado, filas, columnas, ruta)
+        nuevo_bus.crear_asientos()
+        nuevo_bus.asignar_mal_estado()
+        nuevo_bus.mostrar_asientos()
         return  nuevo_bus
 
     
