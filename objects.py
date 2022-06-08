@@ -22,17 +22,19 @@ class Rutas :
         self.destino = destino 
         self.horario = horario
         self.costo = costo
+        self.costo_descuento = costo /2
 
         
 
 class Buses:
-    def __init__(self, numero:int, placa:str, conductor:str, mal_estado:list, filas:int = 4, columnas:int = 10):
+    def __init__(self, numero:int, placa:str, conductor:str, mal_estado:list, filas:int = 4, columnas:int =10 , ruta:object = None):
         self.numero = numero
         self.placa = placa
         self.mal_estado = mal_estado 
         self.conductor = conductor
         self.filas = filas
         self.columnas = columnas
+        self.ruta = ruta
     
     
     def crear_asientos(self):
@@ -45,13 +47,16 @@ class Buses:
 
     def asignar_mal_estado(self):
         mal_estado = self.mal_estado
-        for i in mal_estado:
-            self.asientos[i[0],i[1]] = 2
+        for fila, columna in mal_estado:
+            self.asientos[fila,columna] = 2
 
 
-    def asignar_asiento(self, fila, columna):
-        if self.asientos.all() == 0:
-            self.asientos[fila, columna] = 1
+    def comprobar_asientos_libres(self, fila:int, columna:int):
+        self.asignar_mal_estado()
+        if self.asientos[fila][columna] == 0:
+            return True
+        else:
+            return False
 
 
     def mostrar_asientos(self):
@@ -62,15 +67,13 @@ class Buses:
 
 #hasta aqui vamos bien
 class Pasajero:
-    def __init__(self, nombre:str, ID:int, edad:int, ruta:object, hora_comprado:int, puestos:int, efectivo:int):
+    def __init__(self, nombre:str, ID:int, edad:int, hora_comprado:int, puestos:int, efectivo:int):
         self.nombre = nombre
         self.apellido = ID
         self.edad = edad
-        self.ruta = ruta
         self.hora_comprado = hora_comprado
         self.puestos = puestos
         self.efectivo = efectivo
-
 
     def mostrar_ruta(self):
         print(f'{self.ruta.origen} - {self.ruta.destino}')
@@ -86,49 +89,53 @@ class Pasajero:
             return 'Adulto'
         else:
             return 'No aplica'
-
-    
-    def comprobar_puestos(self):
-        if self.puestos >= 3:
-            return True
-        else:
-            pass
             
 
-    def comprobar_efectivo(self):
-        if self.efectivo >= self.ruta.costo:
-            self.efectivo -= self.ruta.costo
+    def comprobar_efectivo(self, ruta:object):
+        if self.efectivo >= (ruta.costo_descuento if self.puestos > 3 else ruta.costo):
             return True
         else:
-            print('No tiene dinero suficiente')
+            return False
     
 
-    def comprobar_hora(self):
-        if self.hora_comprado <= self.ruta.horario:
+    def comprobar_hora(self, ruta:object):
+        if self.hora_comprado <= ruta.horario:
             return True
         else:
-            print('No se puede comprar en horario anterior')
+            return False
 
 
     def comprobar_edad(self):
         if self.edad >= 18:
             return True
         else:
-            print('Un menor no puede comprar un asiento')
+            return False
 
 
-    def comprar_asiento(self, fila, columna, bus:object):
-        vuelto = f', su vuelto es  de {self.efectivo}'
-        if self.comprobar_efectivo() == True and self.comprobar_hora() == True and self.comprobar_edad() == True:
-            bus.asignar_asiento(fila, columna)
-            self.puestos += 1
-            print(f'Asiento comprado por {self.nombre} a las {self.hora_comprado}, por un total de {self.ruta.costo} pesos {vuelto if self.efectivo > 0 else ""}')
-            sleep(2)
-            if self.puestos == 3:
-                self.ruta.costo /=2
+    def comprar_asiento(self, fila, columna, bus:object, ruta:object):
+        self.ruta = ruta
+        print(f'{self.nombre} su dinero:  {self.efectivo}')
+        if self.comprobar_hora(ruta) == True and self.comprobar_edad():
+            if bus.comprobar_asientos_libres(fila, columna) == True and self.comprobar_efectivo(ruta) == True and bus.ruta == ruta:
+                self.efectivo -= (ruta.costo_descuento if self.puestos >= 3 else ruta.costo)
+                bus.asientos[fila, columna] = 1
+                self.puestos += 1
+                vuelto = f'Su vuelto es  de {self.efectivo}'
+                print(
+                f'''Ticket a nombre de {self.nombre}:
+                Ruta: {self.ruta.origen} -> {self.ruta.destino}
+                Hora: {self.ruta.horario}
+                Costo: {ruta.costo_descuento if self.puestos > 3 else ruta.costo}
+                Puestos: {self.puestos}
+                Efectivo: {self.efectivo}
+                {'' if self.efectivo <= ruta.costo or self.efectivo <= ruta.costo_descuento else vuelto} ''')
+                sleep(2)
+            else:
+                print(''if bus.comprobar_asientos_libres(fila, columna) == True else 'No hay asientos libres')
+                print(''if self.comprobar_efectivo(ruta) == True else 'No tiene suficiente dinero')
+                print('' if bus.ruta == ruta else "No se puede comprar en este bus")
         else:
-            #mostrar la razon por la cual el pasajero no puede comprar el asiento
-            print(f'No se puede comprar el asiento porque {self.nombre} no cumple con los requisitos')
+            print('' if self.comprobar_hora(ruta) == True else "No se puede comprar en horario anterior")
+            print('' if self.comprobar_edad() == True else "Un menor no puede comprar un asiento")
 
-
-
+        
