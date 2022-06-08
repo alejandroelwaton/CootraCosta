@@ -35,7 +35,54 @@ class Buses:
         self.filas = filas
         self.columnas = columnas
         self.ruta = ruta
+
     
+    def modificar_bus(self, rutas:list):
+        self.numero = int(input('numero del bus: '))
+        self.placa = input('placa del bus: ')
+        self.conductor = input('conductor del bus: ')
+        i = int(input('Ingrese un numero: '))
+        while i > 0:
+            i -= 1
+            filas = int(input('Fila del asiento en mal estado: '))
+            columnas = int(input('Columna del asiento en mal estado: '))
+            asiento_mal_estado = [[filas, columnas]]
+            self.mal_estado.append(asiento_mal_estado)
+        self.filas = int(input('filas del bus: '))
+        self.columnas = int(input('Columnas del bus: '))
+
+        for ruta in rutas:
+            print(f'{rutas.index(ruta)+1}, {ruta.origen} -> {ruta.destino}')
+        ruta_bus = input('Ruta que seguira el bus: ')
+        for ruta in rutas:
+            if ruta_bus == rutas.index(ruta)-1:
+                ruta_bus = ruta
+
+    
+
+    def anadir_bus(rutas:list):
+        numero = int(input('numero del bus: '))
+        placa = input('placa del bus: ')
+        conductor = input('conductor del bus: ')
+        puestos_mal_estado = int(input('Cantidad de puestos en mal estado: '))
+        while puestos_mal_estado > 0:
+            asientos_mal_estado = []
+            filas = int(input('Fila del asiento en mal estado: '))
+            columnas = int(input('Columna del asiento en mal estado: '))
+            asientos_mal_estado.append([filas, columnas])
+            puestos_mal_estado -= 1
+        mal_estado = [asientos for asientos in asientos_mal_estado]
+        print(mal_estado)
+        for ruta in rutas:
+            print(f'{rutas.index(ruta)+1}, {ruta.origen} -> {ruta.destino}')
+        ruta_bus = input('Ruta que seguira el bus: ')
+        for ruta in rutas:
+            if ruta_bus == rutas.index(ruta)-1:
+                ruta_bus = ruta
+
+        nuevo_bus = Buses(numero, placa, conductor, mal_estado, filas, columnas, ruta)
+        return  nuevo_bus
+
     
     def crear_asientos(self):
         filas = self.filas
