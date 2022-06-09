@@ -13,8 +13,6 @@ buses = []
 pasajeros = []
 
 def main():
-    clear()
-    sleep(2)
     bus = Buses(1, 'ABS', 'Fuena', [[2,2]], barranquilla_santa_marta)
     print('Bienvenido a Cootracosta')
 
