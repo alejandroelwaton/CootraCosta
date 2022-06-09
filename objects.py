@@ -1,6 +1,18 @@
+
 import numpy as np
 import os
 
+
+def clear():
+    text = ''
+    sistema = os.sys.platform
+    if sistema == 'win32':
+        text = 'cls'
+    elif sistema == "linux" or sistema == "darwin":
+        text = "clear"
+    else:
+        print('Tu sistema operativo no es compatible')
+    os.system(text)
 
 def verificarSiEsEntero(númeroDigitado: str):
     # Retorna True o False si es posible la conversión
@@ -141,8 +153,6 @@ class Buses:
         print('0: Libre\n2: Mal estado\n1: Ocupado')
         print(self.asientos)
         print(f'El conductor del bus {self.conductor} atiende en el bus {self.numero} con placa {self.placa}')
-        sleep(2)
-
 
 #hasta aqui vamos bien
 class Pasajero:
@@ -173,7 +183,6 @@ class Pasajero:
 
     def mostrar_ruta(self):
         print(f'{self.ruta.origen} - {self.ruta.destino}')
-        sleep(2)
 
     
     def etapas(self):
@@ -226,7 +235,6 @@ class Pasajero:
                 Puestos: {self.puestos}
                 Efectivo: {self.efectivo}
                 {'' if self.efectivo <= ruta.costo or self.efectivo <= ruta.costo_descuento else vuelto} ''')
-                sleep(2)
             else:
                 print(''if bus.comprobar_asientos_libres(fila, columna) == True else 'No hay asientos libres')
                 print(''if self.comprobar_efectivo(ruta) == True else 'No tiene suficiente dinero')
