@@ -1,19 +1,6 @@
-from cffi import VerificationError
 import numpy as np
 import os
-from time import sleep
 
-
-def clear():
-    text = ''
-    sistema = os.sys.platform
-    if sistema == 'win32':
-        text = 'cls'
-    elif sistema == "linux" or sistema == "darwin":
-        text = "clear"
-    else:
-        print('Tu sistema operativo no es compatible')
-    os.system(text)
 
 def verificarSiEsEntero(númeroDigitado: str):
     # Retorna True o False si es posible la conversión
